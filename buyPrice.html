@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <title>House Price Prediction</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        background-image: url("{{url_for('static',filename='images/bg.jpg')}}");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+        background-blend-mode: multiply;
+        position: relative;
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navigationBar bg-transparent">
+      <nav class="navbar navbar-expand-lg bg-transparent">
+        <div class="container-fluid">
+          <a
+            class="navbar-brand text-white"
+            href="/"
+            >Home</a
+          >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse"
+            id="navbarNav"
+          >
+            <ul class="navbar-nav mx-3">
+              <li class="nav-item mx-2">
+                <a
+                  class="nav-link active text-white"
+                  aria-current="page"
+                  href="#"
+                  >Dashboard</a
+                >
+              </li>
+              <li class="nav-item mx-2">
+                <a
+                  class="nav-link text-white"
+                  href="buyPrice.html"
+                  >Buy House</a
+                >
+              </li>
+              <li class="nav-item mx-2">
+                <a
+                  class="nav-link text-white"
+                  href="rentPrice.html"
+                  >Rent House</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- <div class="Mainform bg-transparent p-5 m-5">
+      <h3 class="text-white mb-4">House Price Form</h3>
+      <div class="form w-50">
+        <form method="POST">
+          <div class="mb-3">
+            <label
+              for="exampleDataList"
+              class="form-label text-white h4"
+              >City</label
+            >
+            <select
+              class="form-select bg-transparent"
+              aria-label="Default select example"
+              name="city"
+              id="city"
+              required="1"
+            >
+              <option selected></option>
+
+              <option value=""></option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              for="exampleDataList"
+              class="form-label text-white h4"
+              >location</label
+            >
+            <select
+              class="form-select bg-transparent"
+              name="location"
+              id="location"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option selected></option>
+              <option></option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label text-white h4"
+              for="exampleCheck1 "
+              >BHK</label
+            >
+            <select
+              class="form-select bg-transparent"
+              name="bhk"
+              id="bhk"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option selected></option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label
+              class="form-check-label text-white h4"
+              for="exampleCheck1"
+              >Area</label
+            >
+            <input
+              type="text "
+              class="form-control bg-transparent"
+              id="area"
+              name="area"
+              required="1"
+            />
+          </div>
+          <div class="mb-3">
+            <label
+              class="form-check-label text-white h4"
+              for="exampleCheck1"
+              >resale</label
+            >
+            <select
+              class="form-select bg-transparent"
+              name="resale"
+              id="resale"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option selected></option>
+              <option value="1">yes</option>
+              <option value="2">no</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            onclick=""
+          >
+            Predict price
+          </button>
+          <div>
+            <h2><span id="prediction"></span></h2>
+          </div>
+        </form>
+      </div>
+    </div> -->
+
+    <div class="Mainform bg-transparent text-white p-5 m-5 w-75">
+      <h1>Buy Price Form</h1>
+      <div class="form">
+        <form method="POST">
+          <div class="mb-3">
+            <label
+              for="exampleDataList"
+              class="form-label"
+              >City</label
+            >
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              name="city"
+              id="city"
+              required="1"
+            >
+              <option selected>select city</option>
+              {% for city in cities %}
+              <option value="{{city}}">{{city}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              for="exampleDataList"
+              class="form-label"
+              >location</label
+            >
+            <select
+              class="form-select"
+              name="location"
+              id="location"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option selected>select location</option>
+              {% for location in locations %}
+              <option value="{{location}}">{{location}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >BHK</label
+            >
+            <select
+              class="form-select"
+              name="bhk"
+              id="bhk"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option selected>Open this select menu</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >Area</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="area"
+              name="area"
+              required="1"
+            />
+          </div>
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >resale</label
+            >
+            <select
+              class="form-select"
+              name="resale"
+              id="resale"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option selected>Open this select menu</option>
+              <option value="1">yes</option>
+              <option value="2">no</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >GYM</label
+            >
+            <select
+              class="form-select"
+              name="gym"
+              id="gym"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >24X7Security</label
+            >
+            <select
+              class="form-select"
+              name="24X7Security"
+              id="24X7Security"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >MaintenanceStaff</label
+            >
+            <select
+              class="form-select"
+              name="MaintenanceStaff"
+              id="MaintenanceStaff"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >ClubHouse</label
+            >
+            <select
+              class="form-select"
+              name="ClubHouse"
+              id="ClubHouse"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >SwimmingPool</label
+            >
+            <select
+              class="form-select"
+              name="SwimmingPool"
+              id="SwimmingPool"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >LandscapedGardens</label
+            >
+            <select
+              class="form-select"
+              name="LandscapedGardens"
+              id="LandscapedGardens"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >JoggingTrack</label
+            >
+            <select
+              class="form-select"
+              name="JoggingTrack"
+              id="JoggingTrack"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >RainWaterHarvesting</label
+            >
+            <select
+              class="form-select"
+              name="RainWaterHarvesting"
+              id="RainWaterHarvesting"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >IndoorGames</label
+            >
+            <select
+              class="form-select"
+              name="IndoorGames"
+              id="IndoorGames"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >ShoppingMall</label
+            >
+            <select
+              class="form-select"
+              name="ShoppingMall"
+              id="ShoppingMall"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >Intercom</label
+            >
+            <select
+              class="form-select"
+              name="Intercom"
+              id="Intercom"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >SportsFacility</label
+            >
+            <select
+              class="form-select"
+              name="SportsFacility"
+              id="SportsFacility"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >School</label
+            >
+            <select
+              class="form-select"
+              name="School"
+              id="School"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >PowerBackup</label
+            >
+            <select
+              class="form-select"
+              name="PowerBackup"
+              id="PowerBackup"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >CarParking</label
+            >
+            <select
+              class="form-select"
+              name="CarParking"
+              id="CarParking"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >StaffQuarter</label
+            >
+            <select
+              class="form-select"
+              name="StaffQuarter"
+              id="StaffQuarter"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >Cafeteria</label
+            >
+            <select
+              class="form-select"
+              name="Cafeteria"
+              id="Cafeteria"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >MultipurposeRoom</label
+            >
+            <select
+              class="form-select"
+              name="MultipurposeRoom"
+              id="MultipurposeRoom"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >Hospital nearby</label
+            >
+            <select
+              class="form-select"
+              name="Hospital"
+              id="Hospital"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >WashingMachine</label
+            >
+            <select
+              class="form-select"
+              name="WashingMachine"
+              id="WashingMachine"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >Gasconnection</label
+            >
+            <select
+              class="form-select"
+              name="Gasconnection"
+              id="Gasconnection"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >AC</label
+            >
+            <select
+              class="form-select"
+              name="AC"
+              id="AC"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >Children's playarea</label
+            >
+            <select
+              class="form-select"
+              name="Childrenplayarea"
+              id="Childrenplayarea"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >LiftAvailable</label
+            >
+            <select
+              class="form-select"
+              name="LiftAvailable"
+              id="LiftAvailable"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >BED</label
+            >
+            <select
+              class="form-select"
+              name="BED"
+              id="BED"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >VaastuCompliant</label
+            >
+            <select
+              class="form-select"
+              name="VaastuCompliant"
+              id="VaastuCompliant"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >Microwave</label
+            >
+            <select
+              class="form-select"
+              name="Microwave"
+              id="Microwave"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >GolfCourse</label
+            >
+            <select
+              class="form-select"
+              name="GolfCourse"
+              id="GolfCourse"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >TV</label
+            >
+            <select
+              class="form-select"
+              name="TV"
+              id="TV"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >DiningTable</label
+            >
+            <select
+              class="form-select"
+              name="DiningTable"
+              id="DiningTable"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >Sofa</label
+            >
+            <select
+              class="form-select"
+              name="Sofa"
+              id="Sofa"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >Refrigerator</label
+            >
+            <select
+              class="form-select"
+              name="Refrigerator"
+              id="Refrigerator"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                no
+              </option>
+              <option value="1">yes</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label
+              class="form-check-label"
+              for="exampleCheck1"
+              >ATM in building</label
+            >
+            <select
+              class="form-select"
+              name="ATM"
+              id="ATM"
+              required="1"
+              aria-label="Default select example"
+            >
+              <option
+                value="0"
+                selected
+              >
+                No
+              </option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            onclick="send_data()"
+          >
+            Predict price
+          </button>
+          <div>
+            <h2><span id="prediction"></span></h2>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function form_handler(event) {
+        event.preventDefault();
+      }
+
+      function send_data() {
+        document
+          .querySelector("form")
+          .addEventListener("sumbit", form_handler(event));
+
+        var form_data = new FormData(document.querySelector("form"));
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("POST", "/predict", true);
+        document.getElementById("prediction").innerHTML =
+          "please wait predicting the price...";
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == XMLHttpRequest.DONE) {
+            document.getElementById("prediction").innerHTML =
+              "prediction : ₹ " + xhr.responseText;
+          }
+        };
+
+        xhr.onload = function () {};
+        xhr.send(form_data);
+      }
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
